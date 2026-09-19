@@ -2,7 +2,7 @@
 project:
   title:        "Badminton Scorekeeper"
   author:       "Bianca Manganaan"
-  discord:      ""
+  discord:      "biankz"
   description:  "BWF rally-scoring badminton scorekeeper with deuce, cap, serve tracking and undo/redo"
   language:     "Verilog"
   clock_hz:     10000
