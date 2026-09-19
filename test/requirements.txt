@@ -1,2 +1,2 @@
-cocotb>=1.9.0
+cocotb>=1.9.0,<2.0
 pytest>=8.0.0
