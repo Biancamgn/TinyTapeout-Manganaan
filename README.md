@@ -1,42 +1,78 @@
-![](../../workflows/gds/badge.svg) ![](../../workflows/docs/badge.svg) ![](../../workflows/test/badge.svg) ![](../../workflows/fpga/badge.svg)
+# Badminton Scorekeeper — Tiny Tapeout
 
-# Tiny Tapeout Verilog Project Template
+A one-tile ASIC implementing BWF rally scoring for badminton: deuce, the 29-all cap,
+serve tracking, best-of-three match structure, and single-level undo/redo.
 
-- [Read the documentation for project](docs/info.md)
+Built for the DLSU Badminton Society.
 
-## What is Tiny Tapeout?
+- Design details and pinout: [`docs/info.md`](docs/info.md)
+- RTL: [`src/project.v`](src/project.v)
+- Testbench: [`test/`](test/)
 
-Tiny Tapeout is an educational project that aims to make it easier and cheaper than ever to get your digital and analog designs manufactured on a real chip.
+## Status
 
-To learn more and get started, visit https://tinytapeout.com.
+| | |
+|---|---|
+| Top module | `tt_um_badminton_scorekeeper` |
+| Tiles | 1x1 |
+| Nominal clock | 10 kHz |
+| Yosys generic cell count | 648 cells, 56 flip-flops |
+| Tests | 12 cocotb tests, all passing |
 
-## Set up your Verilog project
+## Which template to start from
 
-1. Add your Verilog files to the `src` folder.
-2. Edit the [info.yaml](info.yaml) and update information about your project, paying special attention to the `source_files` and `top_module` properties. If you are upgrading an existing Tiny Tapeout project, check out our [online info.yaml migration tool](https://tinytapeout.github.io/tt-yaml-upgrade-tool/).
-3. Edit [docs/info.md](docs/info.md) and add a description of your project.
-4. Adapt the testbench to your design. See [test/README.md](test/README.md) for more information.
+This is a **Verilog** project, not a Wokwi one. Start from
+`https://github.com/TinyTapeout/ttihp-verilog-template` (or the SKY equivalent if you
+target a Sky130 shuttle), then copy in the files from this repo:
 
-The GitHub action will automatically build the ASIC files using [LibreLane](https://www.zerotoasiccourse.com/terminology/librelane/).
+```
+info.yaml          -> replace
+src/project.v      -> replace
+docs/info.md       -> replace
+test/tb.v          -> replace
+test/test.py       -> replace
+test/requirements.txt -> replace
+test/Makefile      -> keep the template's, unless you need the RTL-only version here
+```
 
-## Enable GitHub actions to build the results page
+Do **not** overwrite `.github/`, `LICENSE`, or `.gitignore` from the template. The
+GitHub Actions workflows in `.github/` are what build your GDS.
 
-- [Enabling GitHub Pages](https://tinytapeout.com/faq/#my-github-action-is-failing-on-the-pages-part)
+## Running the tests
 
-## Resources
+```bash
+cd test
+pip install -r requirements.txt
+sudo apt-get install -y iverilog
+make
+```
 
-- [FAQ](https://tinytapeout.com/faq/)
-- [Digital design lessons](https://tinytapeout.com/digital_design/)
-- [Learn how semiconductors work](https://tinytapeout.com/siliwiz/)
-- [Join the community](https://tinytapeout.com/discord)
-- [Build your design locally](https://www.tinytapeout.com/guides/local-hardening/)
+Expect `TESTS=12 PASS=12 FAIL=0`. A waveform is written to `test/tb.vcd`.
 
-## What next?
+## Build and submit
 
-- [Submit your design to the next shuttle](https://app.tinytapeout.com/).
-- Edit [this README](README.md) and explain your design, how it works, and how to test it.
-- Share your project on your social network of choice:
-  - LinkedIn [#tinytapeout](https://www.linkedin.com/search/results/content/?keywords=%23tinytapeout) [@TinyTapeout](https://www.linkedin.com/company/100708654/)
-  - Mastodon [#tinytapeout](https://chaos.social/tags/tinytapeout) [@matthewvenn](https://chaos.social/@matthewvenn)
-  - X (formerly Twitter) [#tinytapeout](https://twitter.com/hashtag/tinytapeout) [@tinytapeout](https://twitter.com/tinytapeout)
-  - Bluesky [@tinytapeout.com](https://bsky.app/profile/tinytapeout.com)
+1. Push to GitHub, then Settings → Pages → Source → **GitHub Actions**.
+2. Actions → **gds** → Run workflow. Wait for green checks.
+3. Read the **Utilisation %** in the gds summary. If it is above roughly 90%,
+   change `tiles: "1x1"` to `"1x2"` in `info.yaml` and re-run.
+4. tinytapeout.com → Submit your design → sign in with GitHub → point it at this repo.
+5. Press **Submit a new revision** after every change. Only the latest revision goes
+   to the shuttle, and nothing is accepted after the closing date.
+
+## Bench setup
+
+| Signal | Pins | Hardware |
+|---|---|---|
+| Buttons | `ui[3:0]` | 4 momentary switches, 10 kΩ pull-downs |
+| Target select | `ui[5:4]` | 2-position DIP switch |
+| Segments | `uo[6:0]` | 4-digit common-cathode display, 330 Ω per segment |
+| Decimal point | `uo[7]` | same display |
+| Digit enable | `uio[3:0]` | digit drivers, one-hot, active high |
+| Indicators | `uio[7:4]` | 4 LEDs, 330 Ω each |
+
+The demo board's onboard single 7-segment digit will show the multiplexed pattern but
+not a readable score, so the external 4-digit display is required.
+
+## License
+
+Apache-2.0, matching the Tiny Tapeout templates.

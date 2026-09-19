@@ -1,56 +1,47 @@
 # Tiny Tapeout project information
 project:
-  title:        ""      # Project title
-  author:       ""      # Your name
-  discord:      ""      # Your discord username, for communication and automatically assigning you a Tapeout role (optional)
-  description:  ""      # One line description of what your project does
-  language:     "Verilog" # other examples include SystemVerilog, Amaranth, VHDL, etc
-  clock_hz:     0       # Clock frequency in Hz (or 0 if not applicable)
-
-  # How many tiles your design occupies? A single tile is about 167x108 uM.
-  tiles: "1x1"          # Valid values: 1x1, 1x2, 2x2, 3x2, 4x2, 6x2 or 8x2
-
-  # Your top module name must start with "tt_um_". Make it unique by including your github username:
-  top_module:  "tt_um_example"
-
-  # List your project's source files here.
-  # Source files must be in ./src and you must list each source file separately, one per line.
-  # Don't forget to also update `PROJECT_SOURCES` in test/Makefile.
+  title:        "Badminton Scorekeeper"
+  author:       "Bianca Manganaan"
+  discord:      ""
+  description:  "BWF rally-scoring badminton scorekeeper with deuce, cap, serve tracking and undo/redo"
+  language:     "Verilog"
+  clock_hz:     10000
+  tiles:        "1x1"
+  top_module:   "tt_um_badminton_scorekeeper"
   source_files:
     - "project.v"
 
-# The pinout of your project. Leave unused pins blank. DO NOT delete or add any pins.
-# This section is for the datasheet/website. Use descriptive names (e.g., RX, TX, MOSI, SCL, SEG_A, etc.).
+# The pinout of your project. Leave unused pins blank.
 pinout:
   # Inputs
-  ui[0]: ""
-  ui[1]: ""
-  ui[2]: ""
-  ui[3]: ""
-  ui[4]: ""
-  ui[5]: ""
+  ui[0]: "BTN_POINT_A"
+  ui[1]: "BTN_POINT_B"
+  ui[2]: "BTN_UNDO"
+  ui[3]: "BTN_NEXT"
+  ui[4]: "TARGET_SEL0"
+  ui[5]: "TARGET_SEL1"
   ui[6]: ""
   ui[7]: ""
 
   # Outputs
-  uo[0]: ""
-  uo[1]: ""
-  uo[2]: ""
-  uo[3]: ""
-  uo[4]: ""
-  uo[5]: ""
-  uo[6]: ""
-  uo[7]: ""
+  uo[0]: "SEG_A"
+  uo[1]: "SEG_B"
+  uo[2]: "SEG_C"
+  uo[3]: "SEG_D"
+  uo[4]: "SEG_E"
+  uo[5]: "SEG_F"
+  uo[6]: "SEG_G"
+  uo[7]: "SEG_DP"
 
   # Bidirectional pins
-  uio[0]: ""
-  uio[1]: ""
-  uio[2]: ""
-  uio[3]: ""
-  uio[4]: ""
-  uio[5]: ""
-  uio[6]: ""
-  uio[7]: ""
+  uio[0]: "DIGIT_EN0"
+  uio[1]: "DIGIT_EN1"
+  uio[2]: "DIGIT_EN2"
+  uio[3]: "DIGIT_EN3"
+  uio[4]: "SERVE_A"
+  uio[5]: "SERVE_B"
+  uio[6]: "GAME_POINT"
+  uio[7]: "MATCH_OVER"
 
 # Do not change!
 yaml_version: 6
